@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Field Service Knowledge Base</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <rect width="32" height="32" rx="8" fill="#1a73e8"/>
+                        <path d="M16 8L8 14V22L16 28L24 22V14L16 8Z" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+                        <circle cx="16" cy="16" r="3" fill="white"/>
+                    </svg>
+                    <h1>Field Service AI Assistant</h1>
+                </div>
+                <div class="status" id="connectionStatus">
+                    <span class="status-dot"></span>
+                    <span>Connected</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Search Section -->
+            <div class="search-section">
+                <div class="search-header">
+                    <h2>Describe, Show, or Upload Your Issue</h2>
+                    <p>Use any combination of text, image, or video to find solutions</p>
+                </div>
+
+                <div class="search-inputs">
+                    <!-- Text Input -->
+                    <div class="input-group">
+                        <label>
+                            <span class="input-icon">📝</span>
+                            <span>Describe the Problem</span>
+                        </label>
+                        <textarea 
+                            id="textInput" 
+                            placeholder="e.g., Squealing noise on startup, belt seems loose..."
+                            rows="3"
+                        ></textarea>
+                    </div>
+
+                    <!-- Image Input -->
+                    <div class="input-group">
+                        <label>
+                            <span class="input-icon">📷</span>
+                            <span>Upload a Photo</span>
+                        </label>
+                        <div class="file-upload-area" id="imageUploadArea">
+                            <input type="file" id="imageInput" accept="image/*" hidden>
+                            <div class="upload-prompt" id="imagePrompt">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                                    <polyline points="21 15 16 10 5 21"/>
+                                </svg>
+                                <p>Click to upload or drag & drop</p>
+                                <span>JPG, PNG up to 10MB</span>
+                            </div>
+                            <div class="file-preview" id="imagePreview" style="display: none;">
+                                <img id="imagePreviewImg" alt="Preview">
+                                <button class="remove-file" id="removeImage">×</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Video Input -->
+                    <div class="input-group">
+                        <label>
+                            <span class="input-icon">🎥</span>
+                            <span>Upload a Video</span>
+                        </label>
+                        <div class="file-upload-area" id="videoUploadArea">
+                            <input type="file" id="videoInput" accept="video/*" hidden>
+                            <div class="upload-prompt" id="videoPrompt">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <polygon points="23 7 16 12 23 17 23 7"/>
+                                    <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                                </svg>
+                                <p>Click to upload or drag & drop</p>
+                                <span>MP4, MOV up to 100MB</span>
+                            </div>
+                            <div class="file-preview" id="videoPreview" style="display: none;">
+                                <video id="videoPreviewElement" controls></video>
+                                <button class="remove-file" id="removeVideo">×</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Search Button -->
+                <button class="search-button" id="searchButton">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.35-4.35"/>
+                    </svg>
+                    Search Knowledge Base
+                </button>
+            </div>
+
+            <!-- Results Section -->
+            <div class="results-section" id="resultsSection" style="display: none;">
+                <div class="results-header">
+                    <h3>Search Results</h3>
+                    <span class="results-count" id="resultsCount"></span>
+                </div>
+                
+                <div class="results-container" id="resultsContainer">
+                    <!-- Results will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>Analyzing your query...</p>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" opacity="0.3">
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z"/>
+                    <path d="M2 17L12 22L22 17"/>
+                    <path d="M2 12L12 17L22 12"/>
+                </svg>
+                <h3>Ready to Help</h3>
+                <p>Search using text, images, or video to find solutions</p>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
