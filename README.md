@@ -1,124 +1,66 @@
-# Field Service Technician App
+# FieldServiceNavigator
 
-A multimodal search application for field service technicians to quickly find solutions using text, images, or video queries.
+**Multimodal knowledge search for field-service technicians.** Search a maintenance knowledge base using text, images or video, with BigQuery retrieval and Vertex AI multimodal embeddings.
 
-## Features
-
-- **Multimodal Search**: Search using any combination of text descriptions, photos, or videos
-- **AI-Powered**: Uses Google's Vertex AI multimodal embeddings for semantic search
-- **Real-time Results**: Fast retrieval from BigQuery knowledge base
-- **Rich Media Display**: Preview images and videos directly in search results
-- **Responsive Design**: Works on desktop, tablet, and mobile devices
-
-## Prerequisites
-
-1. Google Cloud Project with the following APIs enabled:
-   - BigQuery API
-   - Vertex AI API
-   - Cloud Storage API
-
-2. Completed setup from the Jupyter notebook:
-   - BigQuery dataset with embeddings
-   - Cloud Storage bucket with assets
-   - Vertex AI multimodal embedding model
-
-3. Node.js 18+ installed
-
-## Installation
-
-1. Clone this repository:
-```bash
-git clone <repository>
-cd field-service-app
-```
-
-2. Install dependencies:
-```bash
-npm install
-```
-
-3. Configure environment variables:
-   - Copy `.env.example` to `.env`
-   - Update with your Google Cloud project details
-
-4. Set up authentication:
-```bash
-# Option 1: Use Application Default Credentials
-gcloud auth application-default login
-
-# Option 2: Use Service Account Key
-export GOOGLE_APPLICATION_CREDENTIALS="/path/to/service-account-key.json"
-```
-
-## Running the Application
-
-### Development Mode
-```bash
-npm run dev
-```
-
-### Production Mode
-```bash
-npm start
-```
-
-The application will be available at `http://localhost:3000`
-
-## Usage
-
-1. **Text Search**: Enter a description of the problem in the text field
-2. **Image Search**: Upload or drag-drop a photo of the equipment
-3. **Video Search**: Upload a video showing the malfunction
-4. **Combined Search**: Use any combination of the above
-
-Click "Search Knowledge Base" to find relevant solutions.
+The repository combines a data-preparation notebook, example assets and a Node.js web application.
 
 ## Architecture
 
-- **Backend**: Node.js with Express
-- **Frontend**: Vanilla JavaScript with modern CSS
-- **Database**: BigQuery with vector embeddings
-- **AI Model**: Vertex AI Multimodal Embeddings
-- **Storage**: Google Cloud Storage for assets
+Browser query → Express API → Vertex AI embeddings → BigQuery knowledge-base search → ranked results and media previews.
 
-## API Endpoints
+Google Cloud Storage holds the media assets. The browser interface lives in [public](public/), and [server.js](server.js) implements search and asset access.
 
-- `GET /api/health` - Health check endpoint
-- `POST /api/search` - Multimodal search endpoint
-  - Accepts: text, image file, video file
-  - Returns: Ranked results with similarity scores
+## Start with the notebook
 
-## Deployment
+Open [the preparation notebook](field-service-notebook-complete_FINAL.ipynb) to inspect the ingestion, embedding and BigQuery setup. Configure your own Google Cloud project, dataset and storage bucket before starting the web application. The server queries a `kb_corpus` table in the configured dataset.
 
-For production deployment, consider:
+## Run the web application
 
-1. **Google Cloud Run**: 
+Use Node.js 18 or newer and a Google Cloud project with BigQuery, Vertex AI and Cloud Storage configured.
+
 ```bash
-gcloud run deploy field-service-app   --source .   --region us-central1   --set-env-vars-from-file .env
+git clone https://github.com/lmlearning/FieldServiceNavigator.git
+cd FieldServiceNavigator
+npm install
 ```
 
-2. **App Engine**:
-```bash
-gcloud app deploy
+Create a local `.env` file using the variables read by the server:
+
+```dotenv
+PROJECT_ID=your-google-cloud-project
+BQ_LOCATION=your-bigquery-location
+BUCKET_NAME=your-storage-bucket
+VERTEX_REGION=your-vertex-region
+DATASET_ID=your-bigquery-dataset
+PORT=3000
 ```
 
-3. **Compute Engine**: Use PM2 or systemd for process management
+Use values matching the resources prepared in the notebook. Authenticate locally and start the app:
 
-## Security Considerations
+```bash
+gcloud auth application-default login
+npm run dev
+```
 
-- Enable HTTPS in production
-- Implement authentication (e.g., Firebase Auth, Auth0)
-- Add rate limiting for API endpoints
-- Validate and sanitize all inputs
-- Use Cloud IAM for service account permissions
+Open http://localhost:3000. `npm start` runs the server without the development watcher. Cloud queries, storage and model calls can incur charges. Keep credentials and local environment configuration out of commits.
 
-## Performance Optimization
+## Explore the repository
 
-- Implement caching for frequently accessed results
-- Use CDN for static assets
-- Consider pagination for large result sets
-- Optimize image/video processing pipeline
+| Path | Purpose |
+| --- | --- |
+| [Notebook](field-service-notebook-complete_FINAL.ipynb) | Data and embedding preparation |
+| [data/assets_manifest.csv](data/assets_manifest.csv) | Example asset inventory |
+| [data](data/) | Manuals, images and videos |
+| [server.js](server.js) | Search, health and media routes |
+| [public](public/) | Browser interface |
+| [package.json](package.json) | Dependencies and startup commands |
+
+The service exposes `GET /api/health`, `POST /api/search` and `GET /asset`. A health response alone does not validate embeddings, cloud permissions or end-to-end retrieval.
+
+## Project status
+
+This is a demonstration and submission artifact. A deployed service needs authentication, upload controls, rate limiting and cloud access policies appropriate to its users and data.
 
 ## License
 
-MIT
+See [LICENSE](LICENSE). Review source terms for third-party media and manuals separately.
