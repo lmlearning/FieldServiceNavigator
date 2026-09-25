@@ -1,4 +1,4 @@
-# FieldServiceNavigator
+# Field Service Navigator: Multimodal Search Hackathon Project
 
 **Multimodal knowledge search for field-service technicians.** Search a maintenance knowledge base using text, images or video, with BigQuery retrieval and Vertex AI multimodal embeddings.
 
